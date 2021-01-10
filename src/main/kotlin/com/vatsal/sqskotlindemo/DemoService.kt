@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service
 class DemoService(
 	val sqs: AmazonSQS,
 	@Value("\${aws.queue.name}") val queueName: String
-): CommandLineRunner {
+) : CommandLineRunner {
 
-	companion object: KLogging()
+	companion object : KLogging()
 
 	override fun run(vararg args: String?) {
 		postMessage("Test Message")
@@ -34,7 +34,7 @@ class DemoService(
 	fun consumeMessage() {
 		val message = sqs.receiveMessage(getQueueUrl(queueName))
 		message.messages.forEach {
-			logger.info { "Message sent: ${it.body}"}
+			logger.info { "Message sent: ${it.body}" }
 			sqs.deleteMessage(DeleteMessageRequest(getQueueUrl(queueName), it.receiptHandle))
 		}
 	}
